@@ -21,6 +21,10 @@ pvc-027deb04-d551-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete     
 pvc-63fb5eda-d550-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete           Bound     default/data-cassandra-cassandra-0           gp2                      51d
 pvc-b2eb9873-d550-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete           Bound     default/data-cassandra-cassandra-1           gp2                      51d
 ```
+
+2. 
+<img src="https://github.com/duckty/note/blob/master/images/awsebs.png?raw=true">
+
 3.
 ```
 - metadata:
