@@ -1,4 +1,4 @@
-#Resizing(increasing only not shrinking) Persistent Volumes(PV) using Kubernetes v1.10
+# Resizing(increasing only not shrinking) Persistent Volumes(PV) using Kubernetes v1.10
 
 I got the cassandra clusters' volumes got full 100%. 
 Cassandra data volume/storage is AWS EBS with its size 100GB
@@ -12,7 +12,7 @@ Cassandra data volume/storage is AWS EBS with its size 100GB
 6. run the resize2fs cmd to resize the filesystem
 7. Run the nodestatus cmd in cassandra nodes to check the cassandra cluster status.
 
-##command output:
+## command output:
 
 1.
 ```
