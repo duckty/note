@@ -1,4 +1,4 @@
-Resizing(increasing only not shrinking) Persistent Volumes(PV) using Kubernetes v1.10
+#Resizing(increasing only not shrinking) Persistent Volumes(PV) using Kubernetes v1.10
 
 I got the cassandra clusters' volumes got full 100%. 
 Cassandra data volume/storage is AWS EBS with its size 100GB
@@ -12,14 +12,17 @@ Cassandra data volume/storage is AWS EBS with its size 100GB
 6. run the resize2fs cmd to resize the filesystem
 7. Run the nodestatus cmd in cassandra nodes to check the cassandra cluster status.
 
-command output:
+##command output:
+
 1.
+```
 kubectl get pv  |grep cassandra
 pvc-027deb04-d551-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete           Bound     default/data-cassandra-cassandra-2           gp2                      51d
 pvc-63fb5eda-d550-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete           Bound     default/data-cassandra-cassandra-0           gp2                      51d
 pvc-b2eb9873-d550-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete           Bound     default/data-cassandra-cassandra-1           gp2                      51d
-
+```
 3.
+```
 - metadata:
       creationTimestamp: null
       labels:
@@ -34,23 +37,25 @@ pvc-b2eb9873-d550-11e8-bb7d-0af134bb8194   100Gi      RWO            Delete     
       resources:
         requests:
           storage: 100Gi
-
+```
 
 4.
-
+```
  kubectl patch pv pvc-027deb04-d551-11e8-bb7d-0af134bb8194  -p '{"spec":{"capacity":{"storage":"500Gi"}}}'
 
  kubectl patch pv pvc-63fb5eda-d550-11e8-bb7d-0af134bb8194  -p '{"spec":{"capacity":{"storage":"500Gi"}}}'
 
  kubectl patch pv pvc-b2eb9873-d550-11e8-bb7d-0af134bb8194  -p '{"spec":{"capacity":{"storage":"500Gi"}}}'
+```
 5. 
-
+```
 kubectl delete pod -l app=cassandra-cassandra
 pod "cassandra-cassandra-0" deleted
 pod "cassandra-cassandra-1" deleted
 pod "cassandra-cassandra-2" deleted
-
+```
 6.
+```
 admin@ip-172-31-37-174:~$ lsblk 
 NAME    MAJ:MIN   RM  SIZE RO TYPE MOUNTPOINT
 xvda    202:0      0  128G  0 disk 
@@ -66,8 +71,11 @@ kubectl get pod -l app=cassandra-cassandra -o wide
 NAME                    READY     STATUS    RESTARTS   AGE       IP              NODE
 cassandra-cassandra-0   1/1       Running   0          4m        100.104.74.19   ip-172-31-59-21.ap-northeast-1.compute.internal
 cassandra-cassandra-1   0/1       Running   0          2m        100.99.16.136   ip-172-31-72-112.ap-northeast-1.compute.internal
+```
 
-7. kubectl exec -it --namespace default $(kubectl get pods --namespace default -l app=cassandra-cassandra -o jsonpath='{.items[0].metadata.name}') nodetool status
+7.
+``` 
+kubectl exec -it --namespace default $(kubectl get pods --namespace default -l app=cassandra-cassandra -o jsonpath='{.items[0].metadata.name}') nodetool status
 Datacenter: datacenter1
 =======================
 Status=Up/Down
@@ -76,3 +84,4 @@ Status=Up/Down
 UN  100.99.16.132   58.47 GiB  256          100.0%            bcd22662-f313-4356-9c09-d0601f70b864  rac1
 UN  100.104.74.20   58.34 GiB  256          100.0%            97b048ff-24ca-4cd8-a374-1e701d73917c  rac1
 UN  100.100.104.26  57.58 GiB  256          100.0%            14ca7595-7b4e-4421-93d3-2658000bfdee  rac1
+```
